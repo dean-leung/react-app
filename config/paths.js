@@ -4,7 +4,7 @@ const fs = require('fs')
 const url = require('url')
 const path = require('path')
 
-const appDirectory = fs.readFileSync(process.cwd())
+const appDirectory = fs.realpathSync(process.cwd())
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath)
 
 const envPublicUrl = process.env.PUBLIC_URL
