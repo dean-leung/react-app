@@ -16,7 +16,6 @@ app.use('*', (request, response) => {
     chalk.yellow(request.path)
   )
   const html = renderer()
-  console.log(html)
   response.send(html)
   return
 })
