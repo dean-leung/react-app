@@ -1,6 +1,8 @@
 const paths = require('./paths')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
+
 module.exports = function(webpackEnv) {
   const isEnvDevelopment = webpackEnv === 'development'
   const isEnvProduction = webpackEnv === 'production'
@@ -13,9 +15,17 @@ module.exports = function(webpackEnv) {
     : isEnvDevelopment && '/'
 
   return {
-    mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
+    mode: isEnvProduction
+      ? 'production'
+      : isEnvDevelopment && 'development',
 
-    devtool: 'source-map',
+    bail: isEnvProduction,
+
+    devtool: isEnvProduction
+      ? shouldUseSourceMap
+        ? 'source-map'
+        : false
+      : isEnvDevelopment && 'cheap-module-source-map',
 
     module: {
       rules: [
@@ -39,9 +49,12 @@ module.exports = function(webpackEnv) {
         template: 'public/index.html'
       }),
     ],
+    
+    stats: 'errors-only',
 
     devServer: {
-      hot: true
+      hot: true,
+      clientLogLevel: 'error'
     }
   }
 }

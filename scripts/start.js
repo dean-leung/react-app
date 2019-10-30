@@ -10,7 +10,6 @@ process.on('unhandledRejection', err => {
 
 // 读取环境变量
 require('../config/env')
-console.log('读取环境变量成功')
 
 const fs = require('fs')
 const chalk = require('react-dev-utils/chalk')
@@ -90,7 +89,6 @@ checkBrowsers(paths.appPath, isInteractive)
       if (err) {
         return console.log(err)
       }
-      console.log('Dev Server is running')
     })
   })
   .catch(err => {
