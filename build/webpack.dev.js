@@ -23,6 +23,14 @@ module.exports = merge(common, {
           'style-loader',
           'css-loader'
         ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'less-loader'
+        ]
       }
     ]
   },
@@ -30,6 +38,10 @@ module.exports = merge(common, {
   devServer: {
     hot: true,
     contentBase: 'dist'
+  },
+
+  watchOptions: {
+    ignored: /node_modules/
   }
 
   // TODO

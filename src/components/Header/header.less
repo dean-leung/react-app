@@ -1,0 +1,42 @@
+@import "../../styles/content";
+@header: header;
+
+.@{header} {
+  background-color: #001529;
+
+  .@{container} {
+    padding: 0 24px;
+  }
+
+  &-logo {
+    width: 10rem;
+    line-height: 4rem;
+    display: inline-block;
+
+    a {
+      display: block;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &-menu {
+    float: right;
+
+    .ant-menu-horizontal {
+      line-height: calc(4rem - 2px);
+      border-bottom-color: transparent;
+      background-color: transparent;
+
+      > .ant-menu-item > a {
+        color: hsla(0, 0%, 100%, .65);
+      }
+
+      > .ant-menu-item.ant-menu-item-selected > a {
+        color: #1890ff;
+      }
+    }
+  }
+}
