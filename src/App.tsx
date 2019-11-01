@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom'
 // @ts-ignore
 import loadable from '@loadable/component'
-import Header from '@/components/Header'
+// import Header from '@/components/Header'
 
 import './styles/common.less'
 import './styles/content.less'
@@ -18,7 +18,7 @@ const AboutPage = loadable(() => import('@/pages/about'))
 const Layout: React.FC = props => {
   return (
     <>
-      <Header/>
+      {/* <Header/> */}
       {props.children}
     </>
   )

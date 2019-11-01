@@ -26,12 +26,12 @@ module.exports = {
               '@babel/preset-typescript'
             ],
             plugins: [
-              '@babel/plugin-syntax-dynamic-import',
               ['import', {
                 'libraryName': 'antd',
                 'libraryDirectory': 'es',
                 'style': 'css' // `style: true` 会加载 less 文件
-              }]
+              }],
+              '@babel/plugin-syntax-dynamic-import'
             ]
           }
         },
@@ -44,11 +44,17 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: resolveApp('public/index.ejs'),
-      filename: 'index.html'
+      filename: 'index.html',
+      minify: {
+        collapseWhitespace: true,
+      }
     }),
     new HtmlWebpackPlugin({
       template: resolveApp('public/index.ejs'),
-      filename: 'about/index.html'
+      filename: 'about/index.html',
+      minify: {
+        collapseWhitespace: true,
+      }
     })
   ],
 
