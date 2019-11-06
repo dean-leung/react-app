@@ -1,46 +1,35 @@
 'use strict'
 
-const webpack = require('webpack')
-// const merge = require('webpack-merge')
-// const common = require('./webpack.common')
-const TerserJSPlugin = require("terser-webpack-plugin")
+const { resolveApp } = require('./utils')
+const TerserJSPlugin = require('terser-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
-const { resolveApp } = require('./utils')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 module.exports = {
   mode: 'production',
 
-  // bail: true,
+  bail: true,
 
-  // devtool: 'source-map',
+  devtool: 'source-map',
 
-  entry: {
-    app: resolveApp('src/main.tsx')
-  },
+  entry: [resolveApp('src/main.tsx')],
 
   output: {
-    filename: 'assets/js/[name].[hash].js',
+    filename: 'assets/js/[name].[hash:8].js',
     path: resolveApp('dist'),
     publicPath: '/'
   },
 
   module: {
     rules: [
-      // {
-      //   oneOf: [
-      //     {
-
-      //     }
-      //   ]
-      // },
+      // TODO: 使用 `oneOf`
       {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
-          "css-loader"
+          'css-loader'
         ]
       },
       {
@@ -53,7 +42,7 @@ module.exports = {
       },
       {
         test: /\.[j|t]sx?$/,
-        loader: {
+        use: {
           loader: 'babel-loader',
           options: {
             presets: [
@@ -62,11 +51,6 @@ module.exports = {
               '@babel/preset-typescript'
             ],
             plugins: [
-              ['import', {
-                'libraryName': 'antd',
-                'libraryDirectory': 'es',
-                'style': 'css' // `style: true` 会加载 less 文件
-              }],
               '@babel/plugin-syntax-dynamic-import'
             ]
           }
@@ -95,15 +79,12 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "assets/css/[name].[hash].css",
       chunkFilename: "assets/css/[id].[hash].css"
-    }),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   comments: /^\**!|@preserve|@license/,
-    // })
+    })
   ],
 
   resolve: {
     modules: ['node_modules', resolveApp('src')],
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: ['.css', '.js', '.ts', '.tsx'],
     alias: {
       '@': resolveApp('src')
     }
@@ -112,18 +93,15 @@ module.exports = {
   optimization: {
     splitChunks: {
       cacheGroups: {
-        vendor: {
-          // test: /[\\/]node_modules[\\/]/,
-          name: "vendor",
-          chunks: "all"
+        verdor: {
+          name: 'vendor',
+          chunks: 'all'
         }
       }
     },
     minimizer: [
       new TerserJSPlugin({}),
-      new OptimizeCSSAssetsPlugin({})
+      new OptimizeCSSAssetsPlugin()
     ]
-  },
-
-  // TODO
+  }
 }

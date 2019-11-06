@@ -1,16 +1,18 @@
 'use strict'
 
-const merge = require('webpack-merge')
-const common = require('./webpack.common')
+const webpack = require('webpack')
 const { resolveApp } = require('./utils')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-module.exports = merge(common, {
+module.exports = {
   mode: 'development',
 
-  devtool: 'cheap-module-source-map',
+  devtool: 'clean-module-source-map', // 来自 `create-react-app`,
+
+  entry: [resolveApp('src/main.tsx')],
 
   output: {
-    filename: 'js/[name].js',
+    filename: '[name].js',
     path: resolveApp('dist'),
     publicPath: '/'
   },
@@ -21,7 +23,7 @@ module.exports = merge(common, {
         test: /\.css$/,
         use: [
           'style-loader',
-          'css-loader'
+          'css-loader' // TODO: postcss
         ]
       },
       {
@@ -31,8 +33,46 @@ module.exports = merge(common, {
           'css-loader',
           'less-loader'
         ]
+      },
+      {
+        test: /\.[j|t]sx?$/,
+        loader: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react',
+              '@babel/preset-typescript'
+            ],
+            plugins: [
+              ['import', {
+                'libraryName': 'antd',
+                'libraryDirectory': 'es',
+                'style': 'css' // `style: true` 会加载 less 文件
+              }],
+              '@babel/plugin-syntax-dynamic-import'
+            ]
+          }
+        },
+        exclude: /node_modules/
       }
     ]
+  },
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: resolveApp('public/index.ejs'),
+      filename: 'index.html'
+    }),
+    new webpack.HotModuleReplacementPlugin()
+  ],
+
+  resolve: {
+    modules: ['node_modules', resolveApp('src')],
+    extensions: ['.css', '.js', '.ts', '.tsx'],
+    alias: {
+      '@': resolveApp('src')
+    }
   },
 
   devServer: {
@@ -43,6 +83,4 @@ module.exports = merge(common, {
   watchOptions: {
     ignored: /node_modules/
   }
-
-  // TODO
-})
+}
